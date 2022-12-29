@@ -1,0 +1,42 @@
+{
+  "name": "fyjlsq",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@ant-design/icons-vue": "^6.1.0",
+    "@fortawesome/fontawesome-svg-core": "^6.2.1",
+    "@fortawesome/free-solid-svg-icons": "^6.2.1",
+    "@fortawesome/vue-fontawesome": "^3.0.2",
+    "@tiptap/extension-character-count": "2.0.0-beta.199",
+    "@tiptap/extension-color": "2.0.0-beta.204",
+    "@tiptap/extension-highlight": "2.0.0-beta.204",
+    "@tiptap/extension-image": "2.0.0-beta.204",
+    "@tiptap/extension-italic": "2.0.0-beta.204",
+    "@tiptap/extension-link": "2.0.0-beta.204",
+    "@tiptap/extension-placeholder": "2.0.0-beta.204",
+    "@tiptap/extension-task-item": "2.0.0-beta.204",
+    "@tiptap/extension-task-list": "2.0.0-beta.204",
+    "@tiptap/extension-text-align": "2.0.0-beta.204",
+    "@tiptap/extension-text-style": "2.0.0-beta.204",
+    "@tiptap/extension-underline": "2.0.0-beta.204",
+    "@tiptap/starter-kit": "2.0.0-beta.199",
+    "@tiptap/vue-3": "2.0.0-beta.199",
+    "@vueuse/core": "^9.6.0",
+    "ant-design-vue": "^3.2.13",
+    "axios": "^1.1.3",
+    "pinia": "^2.0.23",
+    "vue": "^3.2.41",
+    "vue-color-kit": "^1.0.5",
+    "vue-router": "4"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^3.2.0",
+    "vite": "^3.2.0"
+  }
+}
