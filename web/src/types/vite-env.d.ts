@@ -8,6 +8,6 @@ declare module '*.vue' {
 
 interface ImportMetaEnv {
   readonly VITE_SERVER_URL: string;
-  readonly VITE_IMAGE_SERVER_URL: string;
   readonly VITE_IMAGE_UPLOAD_URL: string;
+  readonly VITE_IMAGE_UPLOAD_TOKEN: string;
 }

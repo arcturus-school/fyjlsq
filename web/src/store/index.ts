@@ -25,7 +25,7 @@ export const useAccountStore = defineStore('account', {
   }),
   getters: {
     isManager: (state) => state.roles.includes('manager'),
-    isSuperUser: (state) => true /*state.roles.includes('super')*/,
+    isSuperUser: (state) => state.roles.includes('super'),
   },
   actions: {
     // 获取用户列表
@@ -101,7 +101,8 @@ export const useAccountStore = defineStore('account', {
           message.success(res.msg);
 
           return true;
-        });
+        })
+        .catch(() => false);
     },
 
     // 注册
@@ -122,7 +123,8 @@ export const useAccountStore = defineStore('account', {
           message.success(res.msg);
 
           return true;
-        });
+        })
+        .catch(() => false);
     },
 
     setManager(uid: number, type: string) {
@@ -221,7 +223,7 @@ export const useArticle = defineStore('article', {
         .request({
           url: 'article/user/list',
           method: 'GET',
-          data: { data: { uid, page } },
+          data: { params: { uid, page } },
         })
         .then((res: PersonArticles) => {
           return res;

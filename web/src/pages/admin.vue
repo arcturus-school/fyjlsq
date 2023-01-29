@@ -121,6 +121,7 @@ const obtainPageData = function () {
   user
     .getUserList()
     .then((res) => {
+      loading.value = false;
       hasPermission.value = true;
 
       dataSources.value = res.users.map((e, i) => ({

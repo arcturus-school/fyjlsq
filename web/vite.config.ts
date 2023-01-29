@@ -12,9 +12,18 @@ export default defineConfig({
       resolvers: [AntDesignVueResolver()],
     }),
   ],
+  server: {
+    proxy: {
+      '/upload': {
+        target: 'https://imgloc.com/api/1/upload',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/upload/, ''),
+      },
+    },
+  },
   resolve: {
     alias: {
-      '@': resolve(__dirname, 'src'),
+      '@src': resolve(__dirname, 'src'),
       '@pages': resolve(__dirname, 'src/pages'),
       '@components': resolve(__dirname, 'src/components'),
       '@utils': resolve(__dirname, 'src/utils'),

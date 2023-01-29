@@ -1,5 +1,5 @@
 import axios, { AxiosError, AxiosInstance, Method } from 'axios';
-import { useLoginState, useToken } from '@utils/hooks';
+import { useLoginState, useToken, useUid } from '@utils/hooks';
 import { message } from 'ant-design-vue';
 import { log } from '@utils/log';
 
@@ -46,10 +46,19 @@ export default class Http {
 
     this.ax.interceptors.response.use(
       (resp) => {
-        if (resp.data.code == 200) {
-          log(resp.data);
+        log(resp.data);
 
+        if (resp.data.code == 200) {
           return resp.data;
+        }
+
+        if (resp.data.code === 801) {
+          // account is not exist
+          const [, setUid] = useUid();
+          const [, setToken] = useToken();
+
+          setUid(null);
+          setToken(null);
         }
 
         message.error(resp.data.msg);
@@ -60,12 +69,14 @@ export default class Http {
         });
       },
       (err: AxiosError) => {
-        message.error(err.response?.statusText);
+        log(err);
+
+        message.error(err.message);
 
         // 非 2xx 错误请求
         return Promise.reject({
           code: err.response?.status,
-          msg: err.response?.statusText,
+          msg: err.message,
         });
       }
     );

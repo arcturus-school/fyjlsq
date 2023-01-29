@@ -259,10 +259,11 @@
         <a-modal v-model:visible="uploadImageVisible" title="上传图片">
           <a-upload
             v-model:fileList="ImageList"
-            name="file"
+            name="source"
             accept="image/*"
             list-type="picture-card"
-            :action="IMAGE_UPLOAD_URL"
+            action="/upload"
+            :headers="headers"
             :show-upload-list="false"
             class="style-image-uploader"
             @change="handleImageUploadChange"
@@ -350,6 +351,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
+import { log } from '@utils/log';
 
 export default defineComponent({
   name: 'toolbar',
@@ -363,14 +365,10 @@ import { Editor } from '@tiptap/vue-3';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { Divider, message } from 'ant-design-vue';
 import type { UploadChangeParam, UploadProps } from 'ant-design-vue';
-
+import { getImageName, getImageUrl, headers } from '@src/image';
 // 拾色器
 import { ColorPicker } from 'vue-color-kit';
 import 'vue-color-kit/dist/vue-color-kit.css';
-// 文件处理
-import { getBase64 } from '@utils/index';
-
-const IMAGE_UPLOAD_URL = import.meta.env.VITE_IMAGE_UPLOAD_URL;
 
 const props = defineProps({
   editor: {
@@ -553,10 +551,12 @@ function handleImageUploadChange(info: UploadChangeParam) {
   if (status === 'uploading') {
     uploadLoading.value = true;
   } else if (status === 'done') {
-    getBase64(info.file.originFileObj!, (base64Url) => {
-      imageLink.value = base64Url;
-      uploadLoading.value = false;
-    });
+    const idx = ImageList.value!.length - 1;
+
+    log(ImageList.value![idx]);
+
+    imageLink.value = getImageUrl(ImageList.value![idx].response);
+    uploadLoading.value = false;
   } else if (status === 'error') {
     message.error('图片上传失败');
     uploadLoading.value = false;
@@ -569,8 +569,8 @@ function insertImage() {
     const idx = ImageList.value!.length - 1;
 
     props.editor?.commands.setImage({
-      src: (ImageList.value![idx].response as any).data.links.url,
-      alt: (ImageList.value![idx].response as any).data.origin_name,
+      src: getImageUrl(ImageList.value![idx].response),
+      alt: getImageName(ImageList.value![idx].response),
     });
   }
 

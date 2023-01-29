@@ -1,12 +1,16 @@
 import { Ref, ref } from 'vue';
 
-type Token = [string | null, (t: string) => void];
+type Token = [string | null, (t: string | null) => void];
 
 export function useToken(): Token {
   const token = localStorage.getItem('token');
 
-  function setToken(t: string) {
-    localStorage.setItem('token', t);
+  function setToken(t: string | null) {
+    if (t !== null) {
+      localStorage.setItem('token', t);
+    } else {
+      localStorage.removeItem('token');
+    }
   }
 
   return [token, setToken];
@@ -37,15 +41,27 @@ let uid: number | null = null;
 type Uid = [number | null, (id: number | null) => void];
 
 export function useUid(): Uid {
-  uid = uid === null ? Number(localStorage.getItem('uid')) : uid;
+  if (uid === null) {
+    const u = localStorage.getItem('uid');
+
+    if (u === null) {
+      uid = null;
+    } else {
+      uid = Number(u);
+
+      if (isNaN(uid)) {
+        uid = null;
+      }
+    }
+  }
 
   function setUid(id: number | null) {
-    uid = id;
-
     if (id !== null) {
       localStorage.setItem('uid', String(id));
+      uid = id;
     } else {
       localStorage.removeItem('uid');
+      uid = null;
     }
   }
 

@@ -2,10 +2,10 @@ import { createApp } from 'vue';
 import { createPinia } from 'pinia';
 import Icons from '@utils/icons';
 import { router } from '@router';
-import App from '@/App.vue';
+import App from '@src/App.vue';
 
 import 'ant-design-vue/dist/antd.css';
-import '@/style.css';
+import '@src/style.css';
 
 const app = createApp(App);
 

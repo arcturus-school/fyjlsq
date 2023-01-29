@@ -55,12 +55,13 @@
           <!-- 上传组件 -->
           <a-upload
             v-model:file-list="formState.cover"
-            name="file"
+            name="source"
             list-type="picture-card"
             accept="image/*"
             class="style-cover-uploader"
             :show-upload-list="false"
-            :action="IMAGE_UPLOAD_URL"
+            action="/upload"
+            :headers="headers"
             :before-upload="beforeUpload"
             @change="handleChange"
           >
@@ -111,6 +112,7 @@ import type { UploadChangeParam, UploadProps } from 'ant-design-vue';
 import { useRouter } from 'vue-router';
 import { useArticle } from '@store';
 import { log } from '@utils/log';
+import { getImageUrl, headers } from '@src/image';
 
 // 富文本编辑器
 import { useEditor, EditorContent } from '@tiptap/vue-3';
@@ -127,9 +129,7 @@ import Link from '@tiptap/extension-link';
 import Image from '@tiptap/extension-image';
 import { Color } from '@tiptap/extension-color';
 
-import Toolbar from '@/components/editor/toolbar.vue';
-
-const IMAGE_UPLOAD_URL = '';
+import Toolbar from '@components/editor/toolbar.vue';
 
 const props = defineProps<{ articleInfo: ArticleDetail | undefined }>();
 
@@ -241,15 +241,19 @@ const beforeUpload: UploadProps['beforeUpload'] = function (file: any) {
 
 // 上传文件改变时的状态
 function handleChange(info: UploadChangeParam) {
-  if (info.file.status === 'uploading') {
+  const status = info.file.status;
+
+  if (status === 'uploading') {
     imageUrl.value = '';
     loading.value = true;
-  } else if (info.file.status === 'done') {
+  } else if (status === 'done') {
     const idx = formState.cover!.length - 1;
 
-    imageUrl.value = (formState.cover![idx].response as any).data.links.url;
+    log(formState.cover![idx]);
+
+    imageUrl.value = getImageUrl(formState.cover![idx].response);
     loading.value = false;
-  } else if (info.file.status === 'error') {
+  } else if (status === 'error') {
     message.error('封面图上传失败');
     loading.value = false;
   }
