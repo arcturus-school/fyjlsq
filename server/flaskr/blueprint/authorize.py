@@ -1,4 +1,4 @@
-from flask import Blueprint, jsonify, request
+from flask import Blueprint, abort, jsonify, request
 from flask_jwt_extended import create_access_token
 from flaskr.utils.rbac import allow
 from flaskr.utils.user import (
@@ -115,6 +115,11 @@ def login():
 @auth_blueprint.route("/user_info", methods=["GET"])
 def get_user_info():
     uid = request.args.get("uid")
+
+    if uid is None or not uid.isnumeric():
+        abort(400)
+    else:
+        uid = int(uid)
 
     user = search_user(uid=uid)
 

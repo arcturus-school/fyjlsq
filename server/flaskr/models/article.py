@@ -49,7 +49,11 @@ class Article(db.Model):
         comment="article abstract",
     )
 
-    tags: Mapped[str] = mapped_column(TEXT(), comment="article tags")
+    tags: Mapped[str] = mapped_column(
+        TEXT(),
+        comment="article tags",
+        nullable=True,
+    )
 
     cover: Mapped[str] = mapped_column(
         VARCHAR(255),

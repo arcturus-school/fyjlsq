@@ -56,7 +56,18 @@ def articles():
 @article_blueprint.route("/user/list", methods=["GET"])
 def ones_articles():
     uid = request.args.get("uid")
-    page = request.args.get("page", 1)
+
+    if uid is None or not uid.isnumeric():
+        abort(400)
+    else:
+        uid = int(uid)
+
+    page = request.args.get("page", "1")
+
+    if page.isnumeric():
+        page = int(page)
+    else:
+        page = 1
 
     user = search_user(uid=uid)
 
