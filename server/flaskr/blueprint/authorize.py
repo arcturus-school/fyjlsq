@@ -1,10 +1,7 @@
-from flask import (
-    Blueprint,
-    jsonify,
-    request,
-)
+from flask import Blueprint, jsonify, request
 from flask_jwt_extended import create_access_token
-from ..models.user import (
+from flaskr.utils.rbac import allow
+from flaskr.utils.user import (
     add_new_role,
     get_user_permission,
     get_user_role,
@@ -13,7 +10,6 @@ from ..models.user import (
     search_user,
     add_user,
 )
-from ..models.rbac import allow
 
 
 auth_blueprint = Blueprint("auth", __name__, url_prefix="/auth")

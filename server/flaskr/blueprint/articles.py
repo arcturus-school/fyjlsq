@@ -1,13 +1,8 @@
-from flask import (
-    Blueprint,
-    abort,
-    jsonify,
-    request,
-)
+from flask import Blueprint, abort, jsonify, request
 from flask_jwt_extended import get_jwt_identity
-
-from flaskr.models.rbac import allow
-from flaskr.models.article import (
+from flaskr.utils.rbac import allow
+from flaskr.utils.user import is_manager, is_super_user, search_user
+from flaskr.utils.article import (
     add_article,
     get_article_list,
     get_ones_articles_count,
@@ -16,18 +11,14 @@ from flaskr.models.article import (
     get_ones_articles,
     edit_article,
 )
-from flaskr.models.user import (
-    is_manager,
-    is_super_user,
-    search_user,
-)
+
 
 article_blueprint = Blueprint("article", __name__, url_prefix="/article")
 
 
 # 获取文章列表
 @article_blueprint.route("/list", methods=["GET"])
-def get_articles():
+def articles():
 
     res = get_article_list()
 
