@@ -107,7 +107,7 @@ export default defineComponent({
 </script>
 
 <script setup lang="ts">
-import { ref, onMounted, createVNode, computed, watchEffect } from 'vue';
+import { ref, computed, watch } from 'vue';
 import { useArticle, useAccountStore } from '@store';
 import { useRoute, useRouter } from 'vue-router';
 import { useUid } from '@utils/hooks';
@@ -159,9 +159,11 @@ const obtainPageData = function () {
     });
 };
 
-watchEffect(
+watch(
   () => {
-    obtainPageData();
+    if (typeof route.params.id !== 'undefined') {
+      obtainPageData();
+    }
   },
   () => route.params.id
 );
