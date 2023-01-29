@@ -23,3 +23,17 @@
   left: 20px;
   top: 20px;
 }
+
+.style-loading,
+.style-failed {
+  height: 100%;
+  width: 100%;
+}
+
+.icon-btn-center,
+.style-loading,
+.style-failed {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

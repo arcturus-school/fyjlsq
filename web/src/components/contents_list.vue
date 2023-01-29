@@ -1,33 +1,18 @@
 <template>
   <a-row :gutter="[16, 16]" style="padding: 12px 20px">
-    <a-col
-      v-for="item of articles"
-      :key="item.id"
-      :span="6"
-    >
-      <a-card
-        hoverable
-        @click="enter(item)"
-        :bordered="false"
-      >
+    <a-col v-for="item of articles" :key="item.id" :span="6">
+      <a-card hoverable @click="enter(item)" :bordered="false">
         <!-- 封面图 -->
         <template #cover>
-          <img
-            class="style-cover"
-            :alt="item.title"
-            :src="item.cover"
-          />
+          <img class="style-cover" :alt="item.title" :src="item.cover" />
         </template>
 
-        <a-card-meta
-          :title="item.title"
-          :description="item.abstract"
-        >
+        <a-card-meta :title="item.title" :description="item.abstract">
           <!-- 用户头像 -->
           <template #avatar>
             <a-avatar :size="32" :src="item.user.avatar">
               <template #icon>
-                <user-outlined />
+                <font-awesome-icon icon="fa-solid fa-user" />
               </template>
             </a-avatar>
           </template>
@@ -37,7 +22,7 @@
   </a-row>
 </template>
 
-<script>
+<script lang="ts">
 import { defineComponent } from 'vue';
 
 export default defineComponent({
@@ -45,17 +30,14 @@ export default defineComponent({
 });
 </script>
 
-<script setup>
+<script setup lang="ts">
 import { useRouter } from 'vue-router';
-import { defineProps } from 'vue';
 
 const router = useRouter();
 
-const props = defineProps({
-  articles: Array,
-});
+defineProps<{ articles: Article[] }>();
 
-function enter(article) {
+function enter(article: Article) {
   router.push(`/article-detail/${article.id}`);
 }
 </script>

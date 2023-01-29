@@ -51,17 +51,7 @@
           />
         </a-form-item>
 
-        <a-form-item
-          label="展示封面"
-          name="cover"
-          labelAlign="left"
-          :rules="[
-            {
-              required: true,
-              message: '请上传封面',
-            },
-          ]"
-        >
+        <a-form-item label="展示封面" name="cover" labelAlign="left">
           <!-- 上传组件 -->
           <a-upload
             v-model:file-list="formState.cover"
@@ -86,9 +76,9 @@
             />
             <div v-else>
               <!-- 加载图标 -->
-              <loading-outlined v-if="loading" />
+              <a-spin v-if="loading" />
               <!-- 添加图标 -->
-              <plus-outlined v-else />
+              <font-awesome-icon icon="fa-solid fa-plus" v-else />
             </div>
           </a-upload>
         </a-form-item>
@@ -97,20 +87,16 @@
       <!-- 底部工具栏 -->
       <div class="style-publish-footer">
         <div class="style-publish-footer-content">
-          <div class="style-footer-tip">
-            共 {{ characters }} 字
-          </div>
+          <div class="style-footer-tip">共 {{ characters }} 字</div>
 
-          <a-button type="primary" html-type="submit">
-            发布
-          </a-button>
+          <a-button type="primary" html-type="submit"> 发布 </a-button>
         </div>
       </div>
     </div>
   </a-form>
 </template>
 
-<script>
+<script lang="ts">
 import { defineComponent } from 'vue';
 
 export default defineComponent({
@@ -118,20 +104,13 @@ export default defineComponent({
 });
 </script>
 
-<script setup>
-import {
-  ref,
-  reactive,
-  computed,
-  defineProps,
-  onMounted,
-} from 'vue';
-import { getBase64 } from '@utils/handle';
+<script setup lang="ts">
+import { ref, reactive, computed, onMounted } from 'vue';
 import { message } from 'ant-design-vue';
-import { IMAGE_UPLOAD_URL } from '@/config';
-
+import type { UploadChangeParam, UploadProps } from 'ant-design-vue';
 import { useRouter } from 'vue-router';
-import { useArticle } from '@/store';
+import { useArticle } from '@store';
+import { log } from '@utils/log';
 
 // 富文本编辑器
 import { useEditor, EditorContent } from '@tiptap/vue-3';
@@ -150,9 +129,9 @@ import { Color } from '@tiptap/extension-color';
 
 import Toolbar from '@/components/editor/toolbar.vue';
 
-const props = defineProps({
-  articleInfo: Object,
-});
+const IMAGE_UPLOAD_URL = '';
+
+const props = defineProps<{ articleInfo: ArticleDetail | undefined }>();
 
 // tiptap
 const editor = useEditor({
@@ -208,19 +187,24 @@ const editor = useEditor({
 
 // 编辑器的字符数
 const characters = computed(() => {
-  return (
-    editor.value?.storage.characterCount.characters() ?? 0
-  );
+  return editor.value?.storage.characterCount.characters() ?? 0;
 });
 
 const article = useArticle();
 const router = useRouter();
 
-const formState = reactive({
+const formState = reactive<{
+  title: string;
+  cover: UploadProps['fileList'];
+  count: number;
+  abstract: string;
+  content: string;
+}>({
   title: '',
   cover: [],
   count: 0,
   abstract: '',
+  content: '',
 });
 
 const loading = ref(false);
@@ -228,21 +212,19 @@ const imageUrl = ref('');
 
 onMounted(() => {
   const { articleInfo } = props;
-  if (articleInfo !== null) {
+
+  if (typeof articleInfo !== 'undefined') {
     formState.title = articleInfo.title;
-    formState.cover = [articleInfo.cover];
+    formState.cover = [];
     imageUrl.value = articleInfo.cover;
     formState.abstract = articleInfo.abstract;
-    editor.value?.commands.insertContent(
-      articleInfo.content
-    );
+    editor.value?.commands.insertContent(articleInfo.content);
   }
 });
 
 // 上传图片前操作
-function beforeUpload(file) {
-  const isJpgOrPng =
-    file.type === 'image/jpeg' || file.type === 'image/png';
+const beforeUpload: UploadProps['beforeUpload'] = function (file: any) {
+  const isJpgOrPng = file!.type === 'image/jpeg' || file.type === 'image/png';
 
   if (!isJpgOrPng) {
     message.error('仅支持 jpg 与 png');
@@ -255,18 +237,17 @@ function beforeUpload(file) {
   }
 
   return isJpgOrPng && isLt2M;
-}
+};
 
 // 上传文件改变时的状态
-function handleChange(info) {
+function handleChange(info: UploadChangeParam) {
   if (info.file.status === 'uploading') {
     imageUrl.value = '';
     loading.value = true;
   } else if (info.file.status === 'done') {
-    const idx = formState.cover.length - 1;
+    const idx = formState.cover!.length - 1;
 
-    imageUrl.value =
-      formState.cover[idx].response.data.links.url;
+    imageUrl.value = (formState.cover![idx].response as any).data.links.url;
     loading.value = false;
   } else if (info.file.status === 'error') {
     message.error('封面图上传失败');
@@ -276,26 +257,30 @@ function handleChange(info) {
 
 // 数据提交
 function onFinish() {
-  const data = {
-    content: editor.value.getHTML(),
+  const data: Post = {
+    content: editor.value!.getHTML(),
     title: formState.title,
     cover: imageUrl.value,
     characters: characters.value,
     abstract: formState.abstract,
   };
 
-  if (props.articleInfo !== null) {
+  if (typeof props.articleInfo !== 'undefined') {
     data.id = props.articleInfo.id;
+
+    log(data);
 
     article.edit(data).then((res) => {
       if (res) {
         // 跳转至文章页面
         router.push({
-          path: `/article-detail/${props.articleInfo.id}`,
+          path: `/article-detail/${props.articleInfo!.id}`,
         });
       }
     });
   } else {
+    log(data);
+
     article.post(data).then((id) => {
       if (id) {
         // 跳转至文章页面
@@ -361,8 +346,9 @@ function onFinish() {
 }
 
 /* placeholder */
-:deep(.ProseMirror
-    :is(p, h1, h2, h3, h4, h5, h6).is-empty:first-child::before) {
+:deep(
+    .ProseMirror :is(p, h1, h2, h3, h4, h5, h6).is-empty:first-child::before
+  ) {
   content: attr(data-placeholder);
   float: left;
   color: #adb5bd;

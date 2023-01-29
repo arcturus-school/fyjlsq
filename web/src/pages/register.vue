@@ -1,22 +1,10 @@
 <template>
-  <a-row
-    justify="center"
-    align="middle"
-    class="style-full-screen"
-  >
-    <a-button
-      type="link"
-      href="/home"
-      class="style-back-btn"
-    >
+  <a-row justify="center" align="middle" class="style-full-screen">
+    <a-button type="link" href="/home" class="style-back-btn">
       返回首页
     </a-button>
 
-    <a-form
-      class="style-register-form"
-      :model="formState"
-      @finish="onFinish"
-    >
+    <a-form class="style-register-form" :model="formState" @finish="onFinish">
       <a-form-item
         label="邮箱"
         name="email"
@@ -29,7 +17,7 @@
       >
         <a-input v-model:value="formState.email">
           <template #prefix>
-            <user-outlined class="site-form-item-icon" />
+            <font-awesome-icon icon="fa-solid fa-user" class="form-icon" />
           </template>
         </a-input>
       </a-form-item>
@@ -44,11 +32,9 @@
           },
         ]"
       >
-        <a-input-password
-          v-model:value="formState.password"
-        >
+        <a-input-password v-model:value="formState.password">
           <template #prefix>
-            <lock-outlined class="site-form-item-icon" />
+            <font-awesome-icon icon="fa-solid fa-lock" class="form-icon" />
           </template>
         </a-input-password>
       </a-form-item>
@@ -70,7 +56,7 @@
   </a-row>
 </template>
 
-<script>
+<script lang="ts">
 import { defineComponent } from 'vue';
 
 export default defineComponent({
@@ -78,15 +64,14 @@ export default defineComponent({
 });
 </script>
 
-<script setup>
+<script setup lang="ts">
 import { reactive, computed } from 'vue';
-import { useAccountStore } from '@/store';
-import { useRouter } from 'vue-router';
+import { useAccountStore } from '@store';
+import { LocationQueryValue, useRouter } from 'vue-router';
 
-const formState = reactive({
+const formState = reactive<Register>({
   email: '',
   password: '',
-  remember: true,
 });
 
 const user = useAccountStore();
@@ -108,14 +93,14 @@ const addr = computed(() => {
 });
 
 // 成功提交
-function onFinish(values) {
+function onFinish(values: Register) {
   user.register(values).then((res) => {
     if (res) {
-      const redirect =
-        router.currentRoute.value.query.redirect;
+      const redirect = router.currentRoute.value.query
+        .redirect as LocationQueryValue;
 
       // 返回重定向地址
-      router.push({ path: redirect ?? '/home' });
+      router.push({ path: redirect ?? '/' });
     }
   });
 }
@@ -142,5 +127,9 @@ function onFinish(values) {
   display: inline-block;
   text-align: center;
   margin-top: 12px;
+}
+
+.form-icon {
+  color: rgba(0, 0, 0, 0.45);
 }
 </style>

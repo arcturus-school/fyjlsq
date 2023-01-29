@@ -11,10 +11,7 @@
           }"
           @click="props.editor?.commands.undo()"
         >
-          <font-awesome-icon
-            icon="fa-solid fa-rotate-left"
-            size="lg"
-          />
+          <font-awesome-icon icon="fa-solid fa-rotate-left" size="lg" />
         </div>
       </a-tooltip>
 
@@ -28,10 +25,7 @@
           }"
           @click="props.editor?.commands.redo()"
         >
-          <font-awesome-icon
-            icon="fa-solid fa-rotate-right"
-            size="lg"
-          />
+          <font-awesome-icon icon="fa-solid fa-rotate-right" size="lg" />
         </div>
       </a-tooltip>
 
@@ -56,10 +50,7 @@
 
         <!-- 下拉图标 -->
         <template #suffixIcon>
-          <font-awesome-icon
-            icon="fa-solid fa-caret-down"
-            size="lg"
-          />
+          <font-awesome-icon icon="fa-solid fa-caret-down" size="lg" />
         </template>
       </a-select>
 
@@ -73,10 +64,7 @@
           }"
           @click="props.editor?.commands.toggleBold()"
         >
-          <font-awesome-icon
-            icon="fa-solid fa-bold"
-            size="lg"
-          />
+          <font-awesome-icon icon="fa-solid fa-bold" size="lg" />
         </div>
       </a-tooltip>
 
@@ -90,10 +78,7 @@
           }"
           @click="props.editor?.commands.toggleItalic()"
         >
-          <font-awesome-icon
-            icon="fa-solid fa-italic"
-            size="lg"
-          />
+          <font-awesome-icon icon="fa-solid fa-italic" size="lg" />
         </div>
       </a-tooltip>
 
@@ -103,15 +88,11 @@
         <div
           class="style-toolbar-btn"
           :class="{
-            'is-active':
-              props.editor?.isActive('underline'),
+            'is-active': props.editor?.isActive('underline'),
           }"
           @click="props.editor?.commands.toggleUnderline()"
         >
-          <font-awesome-icon
-            icon="fa-solid fa-underline"
-            size="lg"
-          />
+          <font-awesome-icon icon="fa-solid fa-underline" size="lg" />
         </div>
       </a-tooltip>
 
@@ -125,10 +106,7 @@
           }"
           @click="props.editor?.commands.toggleStrike()"
         >
-          <font-awesome-icon
-            icon="fa-solid fa-strikethrough"
-            size="lg"
-          />
+          <font-awesome-icon icon="fa-solid fa-strikethrough" size="lg" />
         </div>
       </a-tooltip>
 
@@ -155,16 +133,12 @@
             />
           </template>
           <div class="style-toolbar-btn">
-            <font-awesome-icon
-              icon="fa-solid fa-a"
-              size="lg"
-            />
+            <font-awesome-icon icon="fa-solid fa-a" size="lg" />
             <div
               class="style-a-color"
               :style="{
                 backgroundColor:
-                  props.editor?.getAttributes('textStyle')
-                    .color ?? '#000',
+                  props.editor?.getAttributes('textStyle').color ?? '#000',
               }"
             ></div>
           </div>
@@ -179,9 +153,7 @@
           placement="bottom"
           trigger="click"
           :visible="textBackgroundColorPickerVisible"
-          @visibleChange="
-            handleTextBackgroundColorPickerClick
-          "
+          @visibleChange="handleTextBackgroundColorPickerClick"
         >
           <template #content>
             <!-- 拾色器 -->
@@ -194,15 +166,12 @@
             />
           </template>
           <div class="style-toolbar-btn">
-            <font-awesome-icon
-              icon="fa-solid fa-fill-drip"
-            />
+            <font-awesome-icon icon="fa-solid fa-fill-drip" />
             <div
               class="style-a-color"
               :style="{
                 backgroundColor:
-                  props.editor?.getAttributes('highlight')
-                    .color ?? '#fff',
+                  props.editor?.getAttributes('highlight').color ?? '#fff',
               }"
             ></div>
           </div>
@@ -232,10 +201,7 @@
         </a-select-option>
 
         <template #suffixIcon>
-          <font-awesome-icon
-            icon="fa-solid fa-caret-down"
-            size="lg"
-          />
+          <font-awesome-icon icon="fa-solid fa-caret-down" size="lg" />
         </template>
       </a-select>
 
@@ -245,15 +211,11 @@
         <div
           class="style-toolbar-btn"
           :class="{
-            'is-active':
-              props.editor?.isActive('bulletList'),
+            'is-active': props.editor?.isActive('bulletList'),
           }"
           @click="props.editor?.commands.toggleBulletList()"
         >
-          <font-awesome-icon
-            icon="fa-solid fa-list-ul"
-            size="lg"
-          />
+          <font-awesome-icon icon="fa-solid fa-list-ul" size="lg" />
         </div>
       </a-tooltip>
 
@@ -263,17 +225,11 @@
         <div
           class="style-toolbar-btn"
           :class="{
-            'is-active':
-              props.editor?.isActive('orderedList'),
+            'is-active': props.editor?.isActive('orderedList'),
           }"
-          @click="
-            props.editor?.commands.toggleOrderedList()
-          "
+          @click="props.editor?.commands.toggleOrderedList()"
         >
-          <font-awesome-icon
-            icon="fa-solid fa-list-ol"
-            size="lg"
-          />
+          <font-awesome-icon icon="fa-solid fa-list-ol" size="lg" />
         </div>
       </a-tooltip>
 
@@ -289,30 +245,18 @@
           }"
           @click="props.editor?.commands.toggleTaskList()"
         >
-          <font-awesome-icon
-            icon="fa-solid fa-square-check"
-            size="lg"
-          />
+          <font-awesome-icon icon="fa-solid fa-square-check" size="lg" />
         </div>
       </a-tooltip>
 
       <!-- 图片 -->
       <a-tooltip placement="bottom">
         <template #title> 插入图片 </template>
-        <div
-          class="style-toolbar-btn"
-          @click="openUploadModal"
-        >
-          <font-awesome-icon
-            icon="fa-solid fa-image"
-            size="lg"
-          />
+        <div class="style-toolbar-btn" @click="openUploadModal">
+          <font-awesome-icon icon="fa-solid fa-image" size="lg" />
         </div>
 
-        <a-modal
-          v-model:visible="uploadImageVisible"
-          title="上传图片"
-        >
+        <a-modal v-model:visible="uploadImageVisible" title="上传图片">
           <a-upload
             v-model:fileList="ImageList"
             name="file"
@@ -334,8 +278,8 @@
               }"
             />
             <div v-else>
-              <loading-outlined v-if="uploadLoading" />
-              <plus-outlined v-else />
+              <a-spin v-if="uploadLoading" />
+              <font-awesome-icon icon="fa-solid fa-plus" v-else />
             </div>
           </a-upload>
 
@@ -361,10 +305,7 @@
           }"
           @click="openLinkModal"
         >
-          <font-awesome-icon
-            icon="fa-solid fa-paperclip"
-            size="lg"
-          />
+          <font-awesome-icon icon="fa-solid fa-paperclip" size="lg" />
         </div>
 
         <a-modal
@@ -385,15 +326,11 @@
         <div
           class="style-toolbar-btn"
           :class="{
-            'is-active':
-              props.editor?.isActive('blockquote'),
+            'is-active': props.editor?.isActive('blockquote'),
           }"
           @click="props.editor?.commands.toggleBlockquote()"
         >
-          <font-awesome-icon
-            icon="fa-solid fa-quote-left"
-            size="lg"
-          />
+          <font-awesome-icon icon="fa-solid fa-quote-left" size="lg" />
         </div>
       </a-tooltip>
 
@@ -402,21 +339,16 @@
         <template #title> 插入分割线 </template>
         <div
           class="style-toolbar-btn"
-          @click="
-            props.editor?.commands.setHorizontalRule()
-          "
+          @click="props.editor?.commands.setHorizontalRule()"
         >
-          <font-awesome-icon
-            icon="fa-solid fa-grip-lines"
-            size="lg"
-          />
+          <font-awesome-icon icon="fa-solid fa-grip-lines" size="lg" />
         </div>
       </a-tooltip>
     </a-space>
   </a-row>
 </template>
 
-<script>
+<script lang="ts">
 import { defineComponent } from 'vue';
 
 export default defineComponent({
@@ -425,19 +357,20 @@ export default defineComponent({
 });
 </script>
 
-<script setup>
-import { defineProps, h, ref, computed } from 'vue';
+<script setup lang="ts">
+import { h, ref, computed } from 'vue';
 import { Editor } from '@tiptap/vue-3';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import { Divider } from 'ant-design-vue';
-import { IMAGE_UPLOAD_URL } from '@/config.js';
+import { Divider, message } from 'ant-design-vue';
+import type { UploadChangeParam, UploadProps } from 'ant-design-vue';
 
 // 拾色器
 import { ColorPicker } from 'vue-color-kit';
 import 'vue-color-kit/dist/vue-color-kit.css';
-
 // 文件处理
-import { getBase64 } from '@utils/handle';
+import { getBase64 } from '@utils/index';
+
+const IMAGE_UPLOAD_URL = import.meta.env.VITE_IMAGE_UPLOAD_URL;
 
 const props = defineProps({
   editor: {
@@ -523,9 +456,9 @@ const alginMethods = ref([
 const defaultAlignMethod = ref('left');
 
 // 设置标题样式
-function toggleHeader(e) {
+function toggleHeader(e: number) {
   if ([1, 2, 3, 4, 5, 6].includes(e)) {
-    props.editor?.commands.setHeading({ level: e });
+    props.editor?.commands.setHeading({ level: e as any });
   } else {
     // 文本恢复默认样式
     props.editor?.commands.unsetAllMarks();
@@ -534,7 +467,7 @@ function toggleHeader(e) {
 }
 
 // 设置水平居中方式
-function toggleAlign(e) {
+function toggleAlign(e: string) {
   props.editor?.commands.setTextAlign(e);
 }
 
@@ -544,12 +477,12 @@ function toggleAlign(e) {
 const TextColor = ref('#000');
 const textColorPickerVisible = ref(false);
 
-function handleTextColorPickerClick(vis) {
+function handleTextColorPickerClick(vis: boolean) {
   textColorPickerVisible.value = vis;
 }
 
 // 设置文本颜色
-function changeTextColor(color) {
+function changeTextColor(color: Color) {
   props.editor?.commands.setColor(color.hex);
 }
 
@@ -557,17 +490,15 @@ function changeTextColor(color) {
 const TextBackgroundColor = ref('#000');
 const textBackgroundColorPickerVisible = ref(false);
 
-function handleTextBackgroundColorPickerClick(vis) {
+function handleTextBackgroundColorPickerClick(vis: boolean) {
   textBackgroundColorPickerVisible.value = vis;
 }
 
 // 设置文本颜色
-function changeTextBackgroundColor(color) {
+function changeTextBackgroundColor(color: Color) {
   props.editor?.commands.setHighlight({ color: color.hex });
 }
 
-// 链接按钮
-// TODO: Support for custom URL text
 const linkEditorVisible = ref(false);
 
 const link = ref('');
@@ -575,8 +506,7 @@ const link = ref('');
 function openLinkModal() {
   if (
     props.editor?.isActive('link') &&
-    typeof props.editor.getAttributes('link').href !==
-      'undefined'
+    typeof props.editor.getAttributes('link').href !== 'undefined'
   ) {
     link.value = props.editor.getAttributes('link').href;
   } else {
@@ -587,7 +517,7 @@ function openLinkModal() {
 }
 
 function addLink() {
-  props.editor.commands.setLink({
+  props.editor?.commands.setLink({
     href: link.value,
     target: '_blank',
   });
@@ -607,11 +537,9 @@ function deleteLink() {
 const uploadImageVisible = ref(false);
 const imageLink = ref('');
 const uploadLoading = ref(false);
-const ImageList = ref([]);
+const ImageList = ref<UploadProps['fileList']>([]);
 
-const canNotInsertImage = computed(
-  () => imageLink.value === ''
-);
+const canNotInsertImage = computed(() => imageLink.value === '');
 
 function openUploadModal() {
   imageLink.value !== '';
@@ -619,13 +547,13 @@ function openUploadModal() {
 }
 
 // 图片上传
-function handleImageUploadChange(info) {
+function handleImageUploadChange(info: UploadChangeParam) {
   const status = info.file.status;
 
   if (status === 'uploading') {
     uploadLoading.value = true;
   } else if (status === 'done') {
-    getBase64(info.file.originFileObj, (base64Url) => {
+    getBase64(info.file.originFileObj!, (base64Url) => {
       imageLink.value = base64Url;
       uploadLoading.value = false;
     });
@@ -638,16 +566,16 @@ function handleImageUploadChange(info) {
 // 编辑器中插入图片
 function insertImage() {
   if (imageLink.value !== '') {
-    const idx = ImageList.value.length - 1;
+    const idx = ImageList.value!.length - 1;
 
     props.editor?.commands.setImage({
-      src: ImageList.value[idx].response.data.links.url,
-      alt: ImageList.value[idx].response.data.origin_name,
+      src: (ImageList.value![idx].response as any).data.links.url,
+      alt: (ImageList.value![idx].response as any).data.origin_name,
     });
   }
 
   uploadImageVisible.value = false;
-  ImageList.value.length = 0;
+  ImageList.value!.length = 0;
   imageLink.value = '';
 }
 </script>
@@ -687,8 +615,7 @@ function insertImage() {
   opacity: 0.4;
 }
 
-:global(.style-select-dropdown
-    :is(h1, h2, h3, h4, h5, h6)) {
+:global(.style-select-dropdown :is(h1, h2, h3, h4, h5, h6)) {
   margin-bottom: 0 !important;
 }
 

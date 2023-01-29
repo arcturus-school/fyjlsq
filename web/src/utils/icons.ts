@@ -1,15 +1,5 @@
-import {
-  UserOutlined,
-  LockOutlined,
-  PlusOutlined,
-  LoadingOutlined,
-  ArrowLeftOutlined,
-  InboxOutlined,
-} from '@ant-design/icons-vue';
-
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-
 import {
   faBold,
   faRotateRight,
@@ -23,6 +13,7 @@ import {
   faAlignJustify,
   faFillDrip,
   faA,
+  faLeftLong,
   faListUl,
   faListOl,
   faImage,
@@ -35,19 +26,14 @@ import {
   faShareNodes,
   faPenToSquare,
   faArrowLeft,
+  faPlus,
+  faUser,
+  faLock,
 } from '@fortawesome/free-solid-svg-icons';
+import { App } from 'vue';
 
 export default {
-  install(app) {
-    // 注册 ant-design 图标
-    app
-      .component('user-outlined', UserOutlined)
-      .component('lock-outlined', LockOutlined)
-      .component('loading-outlined', LoadingOutlined)
-      .component('arrow-left-outlined', ArrowLeftOutlined)
-      .component('plus-outlined', PlusOutlined)
-      .component('inbox-outlined', InboxOutlined);
-
+  install(app: App) {
     // 注册 fontawesome 图标
     library.add(
       faBold,
@@ -73,7 +59,11 @@ export default {
       faArrowLeft,
       faTrash,
       faShareNodes,
-      faPenToSquare
+      faPenToSquare,
+      faPlus,
+      faUser,
+      faLock,
+      faLeftLong
     );
 
     app.component('font-awesome-icon', FontAwesomeIcon);

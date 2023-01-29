@@ -1,17 +1,10 @@
 <template>
   <a-row>
-    <a-dropdown
-      placement="bottomRight"
-      @click="clickAvatar"
-    >
+    <a-dropdown placement="bottomRight" @click="clickAvatar">
       <!-- 头像 -->
-      <a-avatar
-        :src="user.avatar"
-        :size="32"
-        style="cursor: pointer"
-      >
+      <a-avatar :src="user.avatar" :size="32" style="cursor: pointer">
         <template #icon>
-          <user-outlined />
+          <font-awesome-icon icon="fa-solid fa-user" />
         </template>
       </a-avatar>
 
@@ -28,25 +21,32 @@
   </a-row>
 </template>
 
-<script>
-import { computed, defineComponent } from 'vue';
+<script lang="ts">
+import { VNodeChild, computed, defineComponent } from 'vue';
 
 export default defineComponent({
   name: 'avatar',
 });
 </script>
 
-<script setup>
+<script setup lang="ts">
 import { useRouter } from 'vue-router';
-import { useAccountStore } from '@/store';
-import { useLoginState, useUid } from '@/utils/hooks';
+import { useAccountStore } from '@store';
+import { useLoginState, useUid } from '@utils/hooks';
+
+interface MenuInfo {
+  key: string;
+  keyPath: string[];
+  item: VNodeChild;
+  domEvent: MouseEvent;
+}
 
 const router = useRouter();
 const user = useAccountStore();
 
 const isLogin = computed(() => useLoginState()[0].value);
 
-function clickMenu({ key }) {
+function clickMenu({ key }: MenuInfo) {
   if (key === 'person') {
     router.push(`/userInfo/${useUid()[0]}`);
   } else if (key === 'admin') {

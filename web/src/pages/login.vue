@@ -1,22 +1,8 @@
 <template>
-  <a-row
-    justify="center"
-    align="middle"
-    class="style-full-screen"
-  >
-    <a-button
-      type="link"
-      href="/home"
-      class="style-back-btn"
-    >
-      返回首页
-    </a-button>
+  <a-row justify="center" align="middle" class="style-full-screen">
+    <a-button type="link" href="/" class="style-back-btn"> 返回首页 </a-button>
 
-    <a-form
-      :model="formState"
-      class="style-login-form"
-      @finish="onFinish"
-    >
+    <a-form :model="formState" class="style-login-form" @finish="onFinish">
       <a-form-item
         label="邮箱"
         name="email"
@@ -29,7 +15,7 @@
       >
         <a-input v-model:value="formState.email">
           <template #prefix>
-            <user-outlined class="site-form-item-icon" />
+            <font-awesome-icon icon="fa-solid fa-user" class="form-icon" />
           </template>
         </a-input>
       </a-form-item>
@@ -44,24 +30,15 @@
           },
         ]"
       >
-        <a-input-password
-          v-model:value="formState.password"
-        >
+        <a-input-password v-model:value="formState.password">
           <template #prefix>
-            <lock-outlined class="site-form-item-icon" />
+            <font-awesome-icon icon="fa-solid fa-lock" class="form-icon" />
           </template>
         </a-input-password>
       </a-form-item>
 
       <a-form-item>
-        <a-form-item name="remember" no-style>
-          <a-checkbox v-model:checked="formState.remember">
-            记住密码
-          </a-checkbox>
-        </a-form-item>
-        <a class="style-login-form-forgot" href="">
-          忘记密码?
-        </a>
+        <a class="style-login-form-forgot" href=""> 忘记密码? </a>
       </a-form-item>
 
       <a-form-item>
@@ -81,7 +58,7 @@
   </a-row>
 </template>
 
-<script>
+<script lang="ts">
 import { defineComponent } from 'vue';
 
 export default defineComponent({
@@ -89,15 +66,14 @@ export default defineComponent({
 });
 </script>
 
-<script setup>
+<script setup lang="ts">
 import { computed, reactive } from 'vue';
-import { useAccountStore } from '@/store';
-import { useRouter } from 'vue-router';
+import { useAccountStore } from '@store';
+import { LocationQueryValue, useRouter } from 'vue-router';
 
-const formState = reactive({
+const formState = reactive<Login>({
   email: '',
   password: '',
-  remember: true,
 });
 
 const user = useAccountStore();
@@ -110,7 +86,7 @@ const addr = computed(() => {
     return {
       path: '/register',
       query: {
-        redirect: redirect, // 如果存在重定向地址, 每次跳转时带上
+        redirect: redirect,
       },
     };
   }
@@ -119,28 +95,20 @@ const addr = computed(() => {
 });
 
 // 成功提交
-function onFinish(values) {
+function onFinish(values: Login) {
   user.login(values).then((res) => {
     if (res) {
-      const redirect =
-        router.currentRoute.value.query.redirect;
+      const redirect = router.currentRoute.value.query
+        .redirect as LocationQueryValue;
 
       // 返回重定向地址
-      router.push({ path: redirect ?? '/home' });
+      router.push({ path: redirect ?? '/' });
     }
   });
 }
 </script>
 
 <style scoped>
-.login-page__container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  position: relative;
-}
-
 .style-back-btn {
   position: absolute;
   top: 10px;
@@ -164,5 +132,9 @@ function onFinish(values) {
   display: inline-block;
   text-align: center;
   margin-top: 12px;
+}
+
+.form-icon {
+  color: rgba(0, 0, 0, 0.45);
 }
 </style>

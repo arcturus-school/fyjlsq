@@ -1,8 +1,6 @@
 <template>
   <a-layout class="style-full-screen">
-    <a-layout-content
-      class="style-layout-user-info-contents"
-    >
+    <a-layout-content class="style-layout-user-info-contents">
       <a-button
         shape="circle"
         size="large"
@@ -10,45 +8,56 @@
         class="style-back-btn"
       >
         <template #icon>
-          <font-awesome-icon
-            icon="fa-solid fa-arrow-left"
-            size="lg"
-          />
+          <font-awesome-icon icon="fa-solid fa-arrow-left" size="lg" />
         </template>
       </a-button>
-      <a-row
-        align="middle"
-        justify="center"
-        class="style-user-info-container"
-      >
-        <a-space
-          direction="vertical"
-          size="large"
-          align="center"
+
+      <div class="style-loading" v-if="loading">
+        <a-spin size="large" />
+      </div>
+
+      <div v-else-if="failed" class="style-failed">
+        <a-result status="error" title="获取失败" sub-title="请重新尝试">
+          <template #extra>
+            <a-button key="back" type="primary" href="/"> 返回首页 </a-button>
+            <a-button key="refresh" @click="obtainPageData">
+              重新尝试
+            </a-button>
+          </template>
+        </a-result>
+      </div>
+
+      <div v-else>
+        <a-row
+          align="middle"
+          justify="center"
+          class="style-user-info-container"
         >
-          <a-avatar
-            :src="userInfo.avatar"
-            class="style-user-avatar"
-          ></a-avatar>
+          <a-space direction="vertical" size="large" align="center">
+            <a-avatar
+              :src="userInfo!.avatar"
+              class="style-user-avatar"
+            ></a-avatar>
 
-          <h1 class="style-user-name">
-            {{ userInfo.user_name }}
-          </h1>
-        </a-space>
-      </a-row>
+            <h1 class="style-user-name">
+              {{ userInfo!.user_name }}
+            </h1>
+          </a-space>
+        </a-row>
 
-      <div class="style-contents-container">
-        <a-tabs v-model:activeKey="activeKey">
-          <a-tab-pane key="1" tab="文章">
-            <contentList :articles="articles"></contentList>
-          </a-tab-pane>
-        </a-tabs>
+        <div class="style-contents-container">
+          <a-tabs v-model:activeKey="activeKey">
+            <a-tab-pane key="1" tab="文章">
+              <contentList :articles="articles"></contentList>
+            </a-tab-pane>
+          </a-tabs>
+        </div>
       </div>
     </a-layout-content>
   </a-layout>
 </template>
 
-<script>
+<script lang="ts">
 import { defineComponent } from 'vue';
 
 export default defineComponent({
@@ -56,9 +65,9 @@ export default defineComponent({
 });
 </script>
 
-<script setup>
+<script setup lang="ts">
 import { onMounted, ref } from 'vue';
-import { useAccountStore, useArticle } from '@/store';
+import { useAccountStore, useArticle } from '@store';
 import { useRoute, useRouter } from 'vue-router';
 import contentList from '@components/contents_list.vue';
 
@@ -67,26 +76,44 @@ const article = useArticle();
 const route = useRoute();
 const router = useRouter();
 
-const userInfo = ref({});
-const articles = ref([]);
+const userInfo = ref<UserInfo>();
+const loading = ref(true);
+const failed = ref(false);
+
+const articles = ref<Article[]>([]);
 
 const activeKey = ref('1');
 
-onMounted(() => {
-  user.getUserInfoByUid(route.params.id).then((user) => {
-    userInfo.value = user;
+const obtainPageData = function () {
+  loading.value = true;
+  failed.value = false;
 
-    article.getOnesArticles(user.uid).then((res) => {
-      articles.value = res.articles.map((e) => {
-        e.user = user;
+  user
+    .getUserInfoByUid(route.params.id as string)
+    .then((user) => {
+      userInfo.value = user;
 
-        return e;
+      article.getOnesArticles(user.uid).then((res) => {
+        loading.value = false;
+
+        articles.value = res.articles.map((e) => {
+          const res: Article = e as Article;
+
+          res.user = user;
+
+          return res;
+        });
       });
+    })
+    .catch(() => {
+      loading.value = false;
+      failed.value = true;
     });
-  });
-});
+};
 
-// TODO: 触底刷新
+onMounted(() => {
+  obtainPageData();
+});
 </script>
 
 <style scoped>
@@ -119,9 +146,7 @@ onMounted(() => {
   justify-content: center;
 }
 
-:deep(.style-contents-container
-    .ant-tabs-nav
-    .ant-tabs-nav-wrap) {
+:deep(.style-contents-container .ant-tabs-nav .ant-tabs-nav-wrap) {
   flex: none;
 }
 </style>

@@ -6,71 +6,64 @@
     class="style-back-btn"
   >
     <template #icon>
-      <font-awesome-icon
-        icon="fa-solid fa-arrow-left"
-        size="lg"
-      />
+      <font-awesome-icon icon="fa-solid fa-arrow-left" size="lg" />
     </template>
   </a-button>
 
-  <div class="style-contents-container" v-if="!loading">
+  <div class="style-loading" v-if="loading">
+    <a-spin size="large" />
+  </div>
+
+  <div class="style-failed" v-else-if="failed">
+    <a-result status="error" title="获取失败" sub-title="请重新尝试">
+      <template #extra>
+        <a-button key="back" type="primary" href="/"> 返回首页 </a-button>
+        <a-button key="refresh" @click="obtainPageData"> 重新尝试 </a-button>
+      </template>
+    </a-result>
+  </div>
+
+  <div class="style-contents-container" v-else>
     <a-row>
       <a-col span="12">
-        <a-image :src="articleInfo.cover" height="300px" />
+        <a-image :src="articleInfo!.cover" height="300px" />
       </a-col>
 
       <a-col span="12" class="style-article-info">
         <a-space>
-          <a-button
-            shape="circle"
-            size="large"
-            @click="share"
-          >
+          <a-button shape="circle" size="large" @click="share">
             <template #icon>
-              <font-awesome-icon
-                icon="fa-solid fa-share-nodes"
-                size="lg"
-              />
+              <font-awesome-icon icon="fa-solid fa-share-nodes" size="lg" />
             </template>
           </a-button>
 
           <a-button
             shape="circle"
             size="large"
-            @click="removeArticle(articleInfo.id)"
+            @click="removeArticle(articleInfo!.id)"
             v-if="displayRemoveButton"
           >
             <template #icon>
-              <font-awesome-icon
-                icon="fa-solid fa-trash"
-                size="lg"
-              />
+              <font-awesome-icon icon="fa-solid fa-trash" size="lg" />
             </template>
           </a-button>
 
           <a-button
             shape="circle"
             size="large"
-            @click="editArticle(articleInfo.id)"
+            @click="editArticle(articleInfo!.id)"
             v-if="displayEditButton"
           >
             <template #icon>
-              <font-awesome-icon
-                icon="fa-solid fa-pen-to-square"
-                size="lg"
-              />
+              <font-awesome-icon icon="fa-solid fa-pen-to-square" size="lg" />
             </template>
           </a-button>
         </a-space>
 
         <a-space direction="vertical" style="display: flex">
-          <h1 class="style-title">
-            # {{ articleInfo.title }}
-          </h1>
+          <h1 class="style-title"># {{ articleInfo!.title }}</h1>
 
-          <div>
-            全文共 {{ articleInfo.character_count }} 字
-          </div>
+          <div>全文共 {{ articleInfo!.character_count }} 字</div>
         </a-space>
 
         <a-row align="middle" style="margin-bottom: 10px">
@@ -78,24 +71,22 @@
             <a-avatar
               style="cursor: pointer"
               :size="80"
-              :src="articleInfo.user.avatar"
-              @click="
-                router.push(
-                  `/userInfo/${articleInfo.user.uid}`
-                )
-              "
+              :src="articleInfo!.user.avatar"
+              @click="router.push(`/userInfo/${articleInfo!.user.uid}`)"
             >
               <template #icon>
-                <user-outlined />
+                <font-awesome-icon icon="fa-solid fa-user" />
               </template>
             </a-avatar>
             <a-space direction="vertical">
               <div class="style-user-name">
-                {{ articleInfo.user.user_name }}
+                {{ articleInfo!.user.user_name }}
               </div>
               <div>
                 更新于
-                {{ formatTime(articleInfo.update_at) }}
+                {{
+                  dayjs(articleInfo!.update_at).format('YYYY-MM-DD HH:mm:ss')
+                }}
               </div>
             </a-space>
           </a-space>
@@ -103,14 +94,11 @@
       </a-col>
     </a-row>
 
-    <div
-      class="style-content-body"
-      v-html="articleInfo.content"
-    ></div>
+    <div class="style-content-body" v-html="articleInfo!.content"></div>
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { defineComponent } from 'vue';
 
 export default defineComponent({
@@ -118,34 +106,29 @@ export default defineComponent({
 });
 </script>
 
-<script setup>
-import {
-  ref,
-  onMounted,
-  createVNode,
-  computed,
-  watchEffect,
-} from 'vue';
-import { useArticle, useAccountStore } from '@/store';
+<script setup lang="ts">
+import { ref, onMounted, createVNode, computed, watchEffect } from 'vue';
+import { useArticle, useAccountStore } from '@store';
 import { useRoute, useRouter } from 'vue-router';
 import { useUid } from '@utils/hooks';
-import { formatTime } from '@utils/handle';
 import { message } from 'ant-design-vue';
 import { useClipboard } from '@vueuse/core';
-import { ExclamationCircleOutlined } from '@ant-design/icons-vue';
 import { Modal } from 'ant-design-vue';
+import dayjs from 'dayjs';
 
 const article = useArticle();
 const user = useAccountStore();
 const route = useRoute();
 const router = useRouter();
 
-const articleInfo = ref({});
+const articleInfo = ref<ArticleDetail>();
+
 const loading = ref(true);
+const failed = ref(false);
 
 const displayRemoveButton = computed(() => {
   return (
-    useUid()[0] === articleInfo.value.user.uid ||
+    useUid()[0] === articleInfo.value!.user.uid ||
     user.isManager ||
     user.isSuperUser
   );
@@ -153,43 +136,40 @@ const displayRemoveButton = computed(() => {
 
 // TODO: 支持管理员/超级管理员编辑用户帖子
 const displayEditButton = computed(() => {
-  return useUid()[0] == articleInfo.value.user.uid;
+  return useUid()[0] == articleInfo.value!.user.uid;
 });
 
-onMounted(() => {
-  const id = route.params.id;
+const obtainPageData = function () {
+  const id = route.params.id as string;
 
-  article.getArticleDetail(id).then((res) => {
-    if (res) {
-      articleInfo.value = res;
+  loading.value = true;
+  failed.value = false;
+
+  article
+    .getArticleDetail(id)
+    .then((res) => {
+      if (res) {
+        articleInfo.value = res;
+        loading.value = false;
+      }
+    })
+    .catch(() => {
       loading.value = false;
-    }
-  });
-});
+      failed.value = true;
+    });
+};
 
 watchEffect(
   () => {
-    const id = route.params.id;
-
-    if (typeof id !== 'undefined') {
-      loading.value = true;
-
-      article.getArticleDetail(id).then((res) => {
-        if (res) {
-          articleInfo.value = res;
-          loading.value = false;
-        }
-      });
-    }
+    obtainPageData();
   },
   () => route.params.id
 );
 
 // 删除文章
-function removeArticle(id) {
+function removeArticle(id: string) {
   return Modal.confirm({
     title: () => '确定删除吗?',
-    icon: () => createVNode(ExclamationCircleOutlined),
     okText: () => '确定',
     okType: 'danger',
     cancelText: () => '按错了',
@@ -204,7 +184,7 @@ function removeArticle(id) {
 }
 
 // 编辑文章
-function editArticle(id) {
+function editArticle(id: string) {
   router.push(`/edit/${id}`);
 }
 

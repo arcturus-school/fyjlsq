@@ -7,16 +7,13 @@
           <a-menu
             v-model:selectedKeys="selectedKeys"
             mode="horizontal"
-            @click="({ key }) => router.push(key)"
+            @click="clickMenu"
             :style="{
               lineHeight: '64px',
               borderBottom: 'None',
             }"
           >
-            <a-menu-item
-              v-for="item of navbars"
-              :key="item.key"
-            >
+            <a-menu-item v-for="item of navbars" :key="item.key">
               {{ item.name }}
             </a-menu-item>
           </a-menu>
@@ -30,9 +27,10 @@
             size="32px"
             v-if="isLogin"
             href="/post"
+            class="icon-btn-center"
           >
             <template #icon>
-              <plus-outlined />
+              <font-awesome-icon icon="fa-solid fa-plus" />
             </template>
           </a-button>
           <Avatar></Avatar>
@@ -50,7 +48,7 @@
   </a-layout>
 </template>
 
-<script>
+<script lang="ts">
 import { defineComponent } from 'vue';
 
 export default defineComponent({
@@ -58,37 +56,39 @@ export default defineComponent({
 });
 </script>
 
-<script setup>
-import { computed, onMounted, ref } from 'vue';
-import { useRouter, useRoute } from 'vue-router';
-import { useAccountStore } from '@/store';
+<script setup lang="ts">
+import { VNodeChild, computed, onMounted, ref } from 'vue';
+import { useRouter } from 'vue-router';
+import { useAccountStore } from '@store';
 import { useLoginState } from '@utils/hooks';
 import Avatar from '@components/avatar.vue';
 
+interface MenuInfo {
+  key: string;
+  keyPath: string[];
+  item: VNodeChild;
+  domEvent: MouseEvent;
+}
+
 const router = useRouter();
-const route = useRoute();
 const user = useAccountStore();
 
 const navbars = ref([
   {
-    key: '/contents',
+    key: '/',
     name: '首页',
   },
 ]);
+
+const clickMenu = function ({ key }: MenuInfo) {
+  router.push(key);
+};
 
 const isLogin = computed(() => useLoginState()[0].value);
 
 const selectedKeys = ref([navbars.value[0].key]);
 
 onMounted(() => {
-  if (route.params.id !== undefined) {
-    router.push(`/article-detail/${route.params.id}`);
-  } else {
-    router.push(navbars.value[0].key);
-  }
-
   user.userInfo();
 });
 </script>
-
-<style scoped></style>
