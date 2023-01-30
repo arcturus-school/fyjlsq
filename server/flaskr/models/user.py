@@ -19,7 +19,7 @@ class User(db.Model):
     roles: Mapped[list[Role]] = db.relationship(
         "Role",
         secondary=user_role,
-        backref=db.backref("users", lazy="dynamic"),
+        backref=db.backref("fyjlsq_users", lazy="dynamic"),
     )
 
     email: Mapped[str] = mapped_column(
