@@ -1,0 +1,9 @@
+[[redirects]]
+  from = "/upload"
+  to = "https://imgloc.com/api/1/upload/:splat"
+  status = 200
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
