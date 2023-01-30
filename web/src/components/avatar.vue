@@ -34,19 +34,12 @@ import { useRouter } from 'vue-router';
 import { useAccountStore } from '@store';
 import { useLoginState, useUid } from '@utils/hooks';
 
-interface MenuInfo {
-  key: string;
-  keyPath: string[];
-  item: VNodeChild;
-  domEvent: MouseEvent;
-}
-
 const router = useRouter();
 const user = useAccountStore();
 
 const isLogin = computed(() => useLoginState()[0].value);
 
-function clickMenu({ key }: MenuInfo) {
+function clickMenu({ key }: any) {
   if (key === 'person') {
     router.push(`/userInfo/${useUid()[0]}`);
   } else if (key === 'admin') {

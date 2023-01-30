@@ -24,7 +24,6 @@
           <a-button
             type="primary"
             shape="circle"
-            size="32px"
             v-if="isLogin"
             href="/post"
             class="icon-btn-center"
@@ -57,18 +56,11 @@ export default defineComponent({
 </script>
 
 <script setup lang="ts">
-import { VNodeChild, computed, onMounted, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useAccountStore } from '@store';
 import { useLoginState } from '@utils/hooks';
 import Avatar from '@components/avatar.vue';
-
-interface MenuInfo {
-  key: string;
-  keyPath: string[];
-  item: VNodeChild;
-  domEvent: MouseEvent;
-}
 
 const router = useRouter();
 const user = useAccountStore();
@@ -80,7 +72,7 @@ const navbars = ref([
   },
 ]);
 
-const clickMenu = function ({ key }: MenuInfo) {
+const clickMenu = function ({ key }: any) {
   router.push(key);
 };
 

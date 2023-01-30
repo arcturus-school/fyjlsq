@@ -58,3 +58,15 @@ docker run -p 5000:5000 --name fyjlsq-server fyjlsq-server-image
 user: root
 
 password: root123456
+
+## 可配置环境变量(.env)
+
+```
+JWT_SECRET_KEY=FYJLSQ # jwt 秘钥
+JWT_ACCESS_TOKEN_EXPIRES=365 # jwt 过期时间
+MYSQL_HOST=127.0.0.1
+MYSQL_PORT=3306
+MYSQL_USER=root
+MYSQL_PASSWORD=root
+MYSQL_DB=fyjlsq
+```

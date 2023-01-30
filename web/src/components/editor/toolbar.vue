@@ -454,7 +454,7 @@ const alginMethods = ref([
 const defaultAlignMethod = ref('left');
 
 // 设置标题样式
-function toggleHeader(e: number) {
+function toggleHeader(e: any) {
   if ([1, 2, 3, 4, 5, 6].includes(e)) {
     props.editor?.commands.setHeading({ level: e as any });
   } else {
@@ -465,7 +465,7 @@ function toggleHeader(e: number) {
 }
 
 // 设置水平居中方式
-function toggleAlign(e: string) {
+function toggleAlign(e: any) {
   props.editor?.commands.setTextAlign(e);
 }
 

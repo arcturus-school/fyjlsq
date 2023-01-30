@@ -1,0 +1,46 @@
+version: "3.9"
+
+services:
+  mysql:
+    image: mysql
+    restart: always
+    container_name: fyjlsq-mysql
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: fyjlsq
+    volumes:
+      - ./.docker/mysql/data:/var/lib/mysql
+    networks:
+      - server-network
+
+  server:
+    container_name: fyjlsq-server
+    build:
+      context: server
+      dockerfile: Dockerfile
+    ports:
+      - 5000:5000
+    restart: on-failure
+    depends_on:
+      - mysql
+    networks:
+      - server-network
+
+  nginx:
+    container_name: fyjlsq-web
+    restart: always
+    build:
+      context: web
+      dockerfile: Dockerfile
+    ports:
+      - 80:80
+    networks:
+      - server-network
+    depends_on:
+      - server
+      - mysql
+
+networks:
+  server-network:
