@@ -7,7 +7,7 @@ from sqlalchemy.orm import Mapped, mapped_column
 
 
 class Article(db.Model):
-    __tablename__ = "articles"
+    __tablename__ = "fyjlsq_articles"
 
     id: Mapped[str] = mapped_column(
         CHAR(32),
@@ -18,12 +18,12 @@ class Article(db.Model):
 
     uid: Mapped[int] = mapped_column(
         INTEGER(unsigned=True),
-        db.ForeignKey("users.uid"),
+        db.ForeignKey("fyjlsq_users.uid"),
         nullable=False,
     )
 
     user: Mapped[list[User]] = db.relationship(
-        "User", backref=db.backref("articles", lazy="dynamic")
+        "User", backref=db.backref("fyjlsq_articles", lazy="dynamic")
     )
 
     title: Mapped[str] = mapped_column(

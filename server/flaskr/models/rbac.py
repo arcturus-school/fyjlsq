@@ -4,18 +4,18 @@ from sqlalchemy.orm import Mapped, mapped_column
 
 # 用户-角色
 user_role = db.Table(
-    "user_role",
+    "fyjlsq_user_role",
     db.Column(
         "user_id",
         INTEGER(unsigned=True),
-        db.ForeignKey("users.uid"),
+        db.ForeignKey("fyjlsq_users.uid"),
         nullable=False,
         comment="user's ID",
     ),
     db.Column(
         "role_id",
         INTEGER(unsigned=True),
-        db.ForeignKey("roles.id"),
+        db.ForeignKey("fyjlsq_roles.id"),
         nullable=False,
         comment="role's ID",
     ),
@@ -23,18 +23,18 @@ user_role = db.Table(
 
 # 角色-权限
 role_permission = db.Table(
-    "role_permission",
+    "fyjlsq_role_permission",
     db.Column(
         "role_id",
         INTEGER(unsigned=True),
-        db.ForeignKey("roles.id"),
+        db.ForeignKey("fyjlsq_roles.id"),
         nullable=False,
         comment="role's ID",
     ),
     db.Column(
         "permission_id",
         INTEGER(unsigned=True),
-        db.ForeignKey("permissions.id"),
+        db.ForeignKey("fyjlsq_permissions.id"),
         nullable=False,
         comment="permission's ID",
     ),
@@ -43,7 +43,7 @@ role_permission = db.Table(
 
 # 权限模型
 class Permission(db.Model):
-    __tablename__ = "permissions"
+    __tablename__ = "fyjlsq_permissions"
 
     id: Mapped[int] = mapped_column(
         INTEGER(unsigned=True),
@@ -60,7 +60,7 @@ class Permission(db.Model):
 
 # 角色模型
 class Role(db.Model):
-    __tablename__ = "roles"
+    __tablename__ = "fyjlsq_roles"
 
     id: Mapped[int] = mapped_column(
         INTEGER(unsigned=True),
@@ -79,7 +79,7 @@ class Role(db.Model):
     permissions: Mapped[list[Permission]] = db.relationship(
         "Permission",
         secondary=role_permission,
-        backref=db.backref("roles", lazy="dynamic"),
+        backref=db.backref("fyjlsq_roles", lazy="dynamic"),
     )
 
     def __init__(self, name):

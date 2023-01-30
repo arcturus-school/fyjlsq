@@ -8,7 +8,7 @@ from flaskr.utils.func import random_user_name, random_user_avatar
 
 # 用户模型
 class User(db.Model):
-    __tablename__ = "users"
+    __tablename__ = "fyjlsq_users"
 
     uid: Mapped[int] = mapped_column(
         INTEGER(unsigned=True),
