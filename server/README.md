@@ -1,9 +1,9 @@
-## 本地开发
-
 <div>
     <img src="https://img.shields.io/badge/python-3.11.1-orange" alt="python"/>
     <img src="https://img.shields.io/badge/flask-2.2.2-blue" alt="flask" />
 </div>
+
+## 本地开发
 
 ```bash
 pip3 install virtualenv
@@ -50,10 +50,11 @@ docker build -t fyjlsq-server-image .
 ```
 
 ```bash
-docker run -p 5000:5000 --name fyjlsq-server fyjlsq-server-image 
+docker run -p 5000:5000 --name fyjlsq-server fyjlsq-server-image
 ```
 
 ## 超级管理员账户
 
 user: root
+
 password: root123456
