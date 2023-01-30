@@ -1,0 +1,10 @@
+workers = 2 # 并行工作进程数
+threads = 4 # 每个工作者的线程数
+bind = '0.0.0.0:5000'
+worker_class = 'gevent' # 工作模式协程
+worker_connections = 2000 # 最大并发量
+pidfile = 'gunicorn.pid' # 进程文件目录
+accesslog = 'gunicorn_acess.log' # 访问日志
+errorlog  = 'gunicorn_error.log' # 错误信息日志
+loglevel = 'info' # 日志记录水平
+reload=True # 代码发生变化是否自动重启s
