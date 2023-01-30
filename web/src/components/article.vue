@@ -25,11 +25,11 @@
 
   <div class="style-contents-container" v-else>
     <a-row>
-      <a-col span="12">
+      <a-col :sm="24" :md="12">
         <a-image :src="articleInfo!.cover" height="300px" />
       </a-col>
 
-      <a-col span="12" class="style-article-info">
+      <a-col :sm="24" :md="12" class="style-article-info">
         <a-space>
           <a-button shape="circle" size="large" @click="share">
             <template #icon>
@@ -205,6 +205,12 @@ function share() {
   padding: 24px;
   border-radius: 20px;
   background-color: white;
+}
+
+@media only screen and (max-width: 720px) {
+  .style-contents-container {
+    margin: 80px 20px;
+  }
 }
 
 .style-title {

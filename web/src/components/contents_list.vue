@@ -1,6 +1,6 @@
 <template>
   <a-row :gutter="[16, 16]" style="padding: 12px 20px">
-    <a-col v-for="item of articles" :key="item.id" :span="6">
+    <a-col v-for="item of articles" :key="item.id" :xs="24" :sm="12" :md="6">
       <a-card hoverable @click="enter(item)" :bordered="false">
         <!-- 封面图 -->
         <template #cover>
