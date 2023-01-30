@@ -178,7 +178,7 @@ function removeArticle(id: string) {
     onOk() {
       article.removeArticle(id).then((res) => {
         if (res) {
-          router.push('contents');
+          router.push('/');
         }
       });
     },
