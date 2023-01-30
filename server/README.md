@@ -70,3 +70,9 @@ MYSQL_USER=root
 MYSQL_PASSWORD=root
 MYSQL_DB=fyjlsq
 ```
+
+```bash
+# MYSQL_HOST=172.17.0.1 # 单独 docker build 时使用
+
+MYSQL_HOST=mysql # docker-compose 时使用
+```
